@@ -24,6 +24,7 @@ jobs:
       - name: Build image.
         run: docker build -t devcontainers-terraform .
 
+      # TODO: investigate and fix issues and enable trivy
       # - name: Run Trivy vulnerability scanner
       #   uses: aquasecurity/trivy-action@master
       #   with:

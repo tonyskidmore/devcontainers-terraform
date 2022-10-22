@@ -24,16 +24,16 @@ jobs:
       - name: Build image.
         run: docker build -t devcontainers-terraform .
 
-      - name: Run Trivy vulnerability scanner
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: 'devcontainers-terraform'
-          format: 'table'
-          # uncomment to fail on found issues with defined severity
-          exit-code: '1'
-          ignore-unfixed: true
-          vuln-type: 'os,library'
-          severity: 'CRITICAL' #,HIGH
+      # - name: Run Trivy vulnerability scanner
+      #   uses: aquasecurity/trivy-action@master
+      #   with:
+      #     image-ref: 'devcontainers-terraform'
+      #     format: 'table'
+      #     # uncomment to fail on found issues with defined severity
+      #     exit-code: '1'
+      #     ignore-unfixed: true
+      #     vuln-type: 'os,library'
+      #     severity: 'CRITICAL' #,HIGH
 
       - name: Run the built image.
         run: docker run --name test-container --entrypoint "/bin/sleep" -d --privileged -v /sys/fs/cgroup:/sys/fs/cgroup:ro devcontainers-terraform 60

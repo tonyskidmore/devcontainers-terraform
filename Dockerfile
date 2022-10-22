@@ -61,5 +61,5 @@ RUN apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
 
-USER $USERNAME
-WORKDIR /home/$USERNAME
+# USER $USERNAME
+# WORKDIR /home/$USERNAME

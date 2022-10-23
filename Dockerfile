@@ -15,7 +15,6 @@ RUN wget --quiet https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/t
 FROM ${IMAGE_REPO}:${IMAGE_VERSION}
 ARG AZURE_CLI_VERSION="2.41.0"
 ARG tflint_version="v0.42.0"
-ARG tflint_azure_ruleset_version="0.18.0"
 ARG USERNAME=vscode
 ARG USER_UID=1000
 
@@ -52,12 +51,9 @@ RUN AZ_REPO=$(lsb_release -cs) && \
     apt-get install -y "azure-cli=${AZURE_CLI_VERSION}-1~bullseye"
 
 # install tflint
-COPY .tflint.hcl ./
 RUN wget https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh -O /tmp/tflint_install_linux.sh && \
     chmod +x /tmp/tflint_install_linux.sh && \
-    TFLINT_VERSION="$tflint_version" /tmp/tflint_install_linux.sh && \
-    sed -i "s/tf_lint_azure_ruleset_version/$tflint_azure_ruleset_version/g" .tflint.hcl && \
-    tflint --init
+    TFLINT_VERSION="$tflint_version" /tmp/tflint_install_linux.sh
 
 # Clean up
 RUN apt-get autoremove -y \

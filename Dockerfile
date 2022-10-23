@@ -1,17 +1,10 @@
-# docker build --build-arg TERRAFORM_VERSION="1.1.8" -t devcontainers-terraform .
-ARG IMAGE_REPO="mcr.microsoft.com/devcontainers/python"
-ARG IMAGE_VERSION="0.203.9-3.10-bullseye"
+# docker build --build-arg TERRAFORM_VERSION="1.3.3" -t devcontainers-terraform .
+ARG IMAGE_REPO="mcr.microsoft.com/devcontainers/go"
+ARG IMAGE_VERSION="0.207.8-1.19-bullseye"
 ARG TERRAFORM_VERSION="1.3.3"
 
 FROM ${IMAGE_REPO}:${IMAGE_VERSION} AS builder
 ARG TERRAFORM_VERSION
-
-# RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
-
-# RUN apt-get update && apt-get install -y --no-install-recommends \
-#     curl \
-#     wget \
-#     unzip
 
 # https://releases.hashicorp.com/terraform/1.3.3/terraform_1.3.3_linux_amd64.zip
 # Terraform
@@ -27,7 +20,6 @@ ARG USER_UID=1000
 # Copy files from builder
 COPY --from=builder ["/usr/bin/terraform", "/usr/bin/terraform"]
 
-
 RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -35,8 +27,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     apt-transport-https \
     lsb-release \
-    gnupg
+    gnupg \
+    python3-pip \
+    python3-venv
 
+# install pre-commit
+RUN python3 -m pip install pipx && \
+    pipx ensurepath && \
+    pipx install pre-commit
 
 # Install Azure CLI system level
 RUN curl -sL https://packages.microsoft.com/keys/microsoft.asc | \
@@ -49,17 +47,7 @@ RUN AZ_REPO=$(lsb_release -cs) && \
     apt-get update && \
     apt-get install -y "azure-cli=${AZURE_CLI_VERSION}-1~bullseye"
 
-# RUN useradd --uid "$USER_UID" -ms /bin/bash "$USERNAME" && \
-#     echo "${USERNAME} ALL=(ALL) NOPASSWD:ALL" > "/etc/sudoers.d/${USERNAME}" && \
-#     chmod 0440 "/etc/sudoers.d/${USERNAME}" && \
-#     chown -R "${USERNAME}:${USERNAME}" "/home/${USERNAME}"
-
-RUN pipx install pre-commit
-
 # Clean up
 RUN apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
-
-# USER $USERNAME
-# WORKDIR /home/$USERNAME

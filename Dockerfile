@@ -31,9 +31,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-pip \
     python3-venv
 
+ENV PIPX_HOME=/usr/local/pipx
+ENV PIPX_BIN_DIR=/usr/local/bin
+
 # install pre-commit
 RUN python3 -m pip install pipx && \
-    pipx ensurepath && \
     pipx install pre-commit
 
 # Install Azure CLI system level

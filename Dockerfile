@@ -13,8 +13,9 @@ RUN wget --quiet https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/t
     mv terraform /usr/bin
 
 FROM ${IMAGE_REPO}:${IMAGE_VERSION}
-ARG AZURE_CLI_VERSION="2.41.0"
-ARG tflint_version="v0.42.0"
+ARG AZURE_CLI_VERSION="2.42.0"
+ARG tflint_version="v0.42.2"
+ARG terrascan_version="latest"
 ARG USERNAME=vscode
 ARG USER_UID=1000
 
@@ -54,6 +55,12 @@ RUN AZ_REPO=$(lsb_release -cs) && \
 RUN wget https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh -O /tmp/tflint_install_linux.sh && \
     chmod +x /tmp/tflint_install_linux.sh && \
     TFLINT_VERSION="$tflint_version" /tmp/tflint_install_linux.sh
+
+# install terrascan - https://github.com/tenable/terrascan/releases
+RUN curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | grep -o -E "https://.+?_Darwin_x86_64.tar.gz")" > terrascan.tar.gz && \
+    tar -xf terrascan.tar.gz terrascan && rm terrascan.tar.gz && \
+    install terrascan /usr/local/bin && rm terrascan && \
+    terrascan
 
 # Clean up
 RUN apt-get autoremove -y \

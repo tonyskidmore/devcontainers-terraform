@@ -57,11 +57,12 @@ RUN wget https://raw.githubusercontent.com/terraform-linters/tflint/master/insta
     TFLINT_VERSION="$tflint_version" /tmp/tflint_install_linux.sh
 
 # install terrascan - https://github.com/tenable/terrascan/releases
-RUN curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | grep -o -E "https://.+?_Darwin_x86_64.tar.gz")" > terrascan.tar.gz && \
+RUN curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | grep -o -E "https://.+?_Linux_x86_64.tar.gz")" > terrascan.tar.gz && \
     tar -xf terrascan.tar.gz terrascan && \
     rm terrascan.tar.gz && \
     install terrascan /usr/local/bin && \
-    rm terrascan
+    rm terrascan && \
+    terrascan version
 
 # Clean up
 RUN apt-get autoremove -y \

@@ -23,7 +23,8 @@ ARG USER_UID=1000
 # Copy files from builder
 COPY --from=builder ["/usr/bin/terraform", "/usr/bin/terraform"]
 
-RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
+RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes && \
+    RUN rm -f /etc/apt/sources.list.d/yarn.list
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \

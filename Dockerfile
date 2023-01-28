@@ -44,7 +44,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-venv \
     gpg
     
-RUN export YARNKEY=yarn-keyring.gpg && 
+RUN export YARNKEY=yarn-keyring.gpg && \
     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmour -o /usr/share/keyrings/$YARNKEY && \
     echo "deb [signed-by=/usr/share/keyrings/$YARNKEY] https://dl.yarnpkg.com/debian stable main" > /etc/apt/sources.list.d/yarn.list && \
     gpg --refresh-keys 23E7166788B63E1E

@@ -25,7 +25,8 @@ COPY --from=builder ["/usr/bin/terraform", "/usr/bin/terraform"]
 
 # update yarn gpg
 # RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor > /usr/share/keyrings/yarn-archive-keyring.gpg
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+# RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+RUN apt-key adv --keyserver keys.gnupg.net --recv-keys 23E7166788B63E1E
 
 RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
 # RUN rm -f /etc/apt/sources.list.d/yarn.list || echo "yarn.list not found"

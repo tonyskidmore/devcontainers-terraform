@@ -31,10 +31,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     lsb-release \
     gnupg \
     python3-pip \
-    python3-venv
+    python3-venv \
+    gpg
 
 ENV PIPX_HOME=/usr/local/pipx
 ENV PIPX_BIN_DIR=/usr/local/bin
+
+# update yarn gpg
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor > /usr/share/keyrings/yarn-archive-keyring.gpg
 
 # install pre-commit
 RUN python3 -m pip install pipx && \

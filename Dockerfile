@@ -30,7 +30,7 @@ RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
 # RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 # RUN apt-key adv --keyserver keys.gnupg.net --recv-keys 23E7166788B63E1E
 
-
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor > /usr/share/keyrings/yarn-archive-keyring.gpg
 
 # RUN rm -f /etc/apt/sources.list.d/yarn.list || echo "yarn.list not found"
 
@@ -41,13 +41,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     lsb-release \
     gnupg \
     python3-pip \
-    python3-venv \
-    gpg
+    python3-venv
     
-RUN export YARNKEY=yarn-keyring.gpg && \
-    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmour -o /usr/share/keyrings/$YARNKEY && \
-    echo "deb [signed-by=/usr/share/keyrings/$YARNKEY] https://dl.yarnpkg.com/debian stable main" > /etc/apt/sources.list.d/yarn.list && \
-    gpg --refresh-keys 23E7166788B63E1E
+# RUN export YARNKEY=yarn-keyring.gpg && \
+#     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmour -o /usr/share/keyrings/$YARNKEY && \
+#     echo "deb [signed-by=/usr/share/keyrings/$YARNKEY] https://dl.yarnpkg.com/debian stable main" > /etc/apt/sources.list.d/yarn.list && \
+#     gpg --refresh-keys 23E7166788B63E1E
 
 ENV PIPX_HOME=/usr/local/pipx
 ENV PIPX_BIN_DIR=/usr/local/bin

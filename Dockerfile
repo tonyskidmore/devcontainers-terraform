@@ -1,6 +1,7 @@
 # docker build --build-arg TERRAFORM_VERSION="1.3.3" -t devcontainers-terraform .
+# https://github.com/devcontainers/images/tree/main/src/go/history
 ARG IMAGE_REPO="mcr.microsoft.com/devcontainers/go"
-ARG IMAGE_VERSION="0.207.8-1.19-bullseye"
+ARG IMAGE_VERSION="0.207.13-1.19-bullseye"
 ARG TERRAFORM_VERSION="1.3.3"
 
 FROM ${IMAGE_REPO}:${IMAGE_VERSION} AS builder
@@ -38,7 +39,7 @@ ENV PIPX_HOME=/usr/local/pipx
 ENV PIPX_BIN_DIR=/usr/local/bin
 
 # update yarn gpg
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor > /usr/share/keyrings/yarn-archive-keyring.gpg
+# RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor > /usr/share/keyrings/yarn-archive-keyring.gpg
 
 # install pre-commit
 RUN python3 -m pip install pipx && \

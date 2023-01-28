@@ -23,12 +23,15 @@ ARG USER_UID=1000
 # Copy files from builder
 COPY --from=builder ["/usr/bin/terraform", "/usr/bin/terraform"]
 
+RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
+
 # update yarn gpg
 # RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor > /usr/share/keyrings/yarn-archive-keyring.gpg
 # RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-RUN apt-key adv --keyserver keys.gnupg.net --recv-keys 23E7166788B63E1E
+# RUN apt-key adv --keyserver keys.gnupg.net --recv-keys 23E7166788B63E1E
 
-RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
+
+
 # RUN rm -f /etc/apt/sources.list.d/yarn.list || echo "yarn.list not found"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -40,6 +43,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3-pip \
     python3-venv \
     gpg
+    
+RUN export YARNKEY=yarn-keyring.gpg && 
+    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmour -o /usr/share/keyrings/$YARNKEY && \
+    echo "deb [signed-by=/usr/share/keyrings/$YARNKEY] https://dl.yarnpkg.com/debian stable main" > /etc/apt/sources.list.d/yarn.list && \
+    gpg --refresh-keys 23E7166788B63E1E
 
 ENV PIPX_HOME=/usr/local/pipx
 ENV PIPX_BIN_DIR=/usr/local/bin

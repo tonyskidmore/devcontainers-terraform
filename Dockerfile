@@ -23,6 +23,10 @@ ARG USER_UID=1000
 # Copy files from builder
 COPY --from=builder ["/usr/bin/terraform", "/usr/bin/terraform"]
 
+# update yarn gpg
+# RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor > /usr/share/keyrings/yarn-archive-keyring.gpg
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
+
 RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
 # RUN rm -f /etc/apt/sources.list.d/yarn.list || echo "yarn.list not found"
 
@@ -38,10 +42,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 ENV PIPX_HOME=/usr/local/pipx
 ENV PIPX_BIN_DIR=/usr/local/bin
-
-# update yarn gpg
-# RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | gpg --dearmor > /usr/share/keyrings/yarn-archive-keyring.gpg
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 
 # install pre-commit
 RUN python3 -m pip install pipx && \

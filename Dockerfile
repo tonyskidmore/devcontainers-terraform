@@ -1,21 +1,21 @@
 # docker build --build-arg TERRAFORM_VERSION="1.3.3" -t devcontainers-terraform .
 # https://github.com/devcontainers/images/tree/main/src/go/history
 ARG IMAGE_REPO="mcr.microsoft.com/devcontainers/go"
-ARG IMAGE_VERSION="0.207.18-1.20-bullseye"
-ARG TERRAFORM_VERSION="1.4.2"
+ARG IMAGE_VERSION="1.0.1-1"
+ARG TERRAFORM_VERSION="1.5.3"
 
 FROM ${IMAGE_REPO}:${IMAGE_VERSION} AS builder
 ARG TERRAFORM_VERSION
 
-# https://releases.hashicorp.com/terraform/1.3.3/terraform_1.3.3_linux_amd64.zip
+# https://releases.hashicorp.com/terraform/1.5.3/terraform_1.5.3_linux_amd64.zip
 # Terraform
 RUN wget --quiet https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
     unzip terraform_${TERRAFORM_VERSION}_linux_amd64.zip && \
     mv terraform /usr/bin
 
 FROM ${IMAGE_REPO}:${IMAGE_VERSION}
-ARG AZURE_CLI_VERSION="2.46.0"
-ARG tflint_version="v0.45.0"
+ARG AZURE_CLI_VERSION="2.50.0"
+ARG tflint_version="v0.47.0"
 ARG terrascan_version="latest"
 ARG USERNAME=vscode
 ARG USER_UID=1000
